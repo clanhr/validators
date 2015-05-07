@@ -17,3 +17,16 @@
   (let [validator (validate/email-validator :email)]
     (is (first (validator {:email "donbonifacio@gmail.com"})))
     (is (not (first (validator {:email "hello"}))))))
+
+(deftest valid-currency-test
+  (is (validate/valid-currency? "100"))
+  (is (validate/valid-currency? "100.2"))
+  (is (not (validate/valid-date? "")))
+  (is (not (validate/valid-date? nil)))
+  (is (not (validate/valid-date? "hello"))))
+
+(deftest currency-validator-test
+  (let [validator (validate/currency-validator :currency)]
+    (is (first (validator {:currency "100.1"})))
+    (is (not (first (validator {:currency "hello"}))))))
+

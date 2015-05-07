@@ -27,3 +27,17 @@
       (if (or empty-email? (email-validator/is-email? (field data)))
         [true {}]
         [false {field #{"invalid email format"}}]))))
+
+(defn valid-currency?
+  "Checks if a currency is valid"
+  [raw]
+  (re-find #"\d+(.\d+)?" raw))
+
+(defn currency-validator
+  "Validates currency format"
+  [field]
+  (fn [data]
+    (let [value (field data)]
+      (if (or (number? value) (empty? value) (valid-currency? (field data)))
+        [true {}]
+        [false {field #{"invalid currency"}}]))))
