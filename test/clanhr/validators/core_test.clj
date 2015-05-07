@@ -30,3 +30,9 @@
     (is (first (validator {:currency "100.1"})))
     (is (not (first (validator {:currency "hello"}))))))
 
+(deftest presence-of-if-test
+  (let [validator-req (validate/presence-of-if :value (constantly true))
+        validator-not-req (validate/presence-of-if :value (constantly false))]
+    (is (not (first (validator-req {}))))
+    (is (first (validator-not-req {})))))
+

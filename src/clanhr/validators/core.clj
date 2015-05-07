@@ -1,6 +1,7 @@
 (ns clanhr.validators.core
   "Utility validators that are compatible with validateur"
   (require [clj-time.coerce :as c]
+           [validateur.validation :refer :all]
            [email-validator.core :as email-validator]))
 
 (defn valid-date?
@@ -41,3 +42,12 @@
       (if (or (number? value) (empty? value) (valid-currency? (field data)))
         [true {}]
         [false {field #{"invalid currency"}}]))))
+
+
+(defn presence-of-if
+  "Runs a presence-of validator if the given function passes"
+  [field if-fn]
+  (fn [data]
+    (if (if-fn data)
+      ((presence-of field) data)
+      [true {}])))

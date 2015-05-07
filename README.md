@@ -5,3 +5,4 @@ Custom model validators, compatible with validateur.
 * `date-validator`
 * `currency-validator`
 * `email-validator`
+* `presence-of-if`
