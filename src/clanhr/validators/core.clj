@@ -1,13 +1,17 @@
 (ns clanhr.validators.core
   "Utility validators that are compatible with validateur"
+  (import org.joda.time.DateTime)
   (require [clj-time.coerce :as c]
+           [clj-time.core :as t]
            [validateur.validation :refer :all]
            [email-validator.core :as email-validator]))
 
 (defn valid-date?
   "Verifies if a date is valid"
   [date]
-  (and (string? date) (c/to-date date)))
+  (or (instance? org.joda.time.DateTime date)
+      (instance? java.util.Date date)
+      (and (string? date) (c/to-date date))))
 
 (defn date-validator
   "Validates dates"
