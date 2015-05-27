@@ -23,13 +23,18 @@
         [true {}]
         [false {field #{"invalid date"}}]))))
 
+(defn valid-email?
+  "Verifies that en email is valid"
+  [email]
+  (email-validator/is-email? email))
+
 (defn email-validator
   "Validates email format"
   [field]
   (fn [data]
     (let [email (field data)
           empty-email? (empty? email)]
-      (if (or empty-email? (email-validator/is-email? (field data)))
+      (if (or empty-email? (valid-email? (field data)))
         [true {}]
         [false {field #{"invalid email format"}}]))))
 
