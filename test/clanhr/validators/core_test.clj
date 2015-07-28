@@ -32,6 +32,7 @@
 (deftest currency-validator-test
   (let [validator (validate/currency-validator :currency)]
     (is (first (validator {:currency "100.1"})))
+    (is (not (first (validator {:currency "100.1/mês"}))))
     (is (not (first (validator {:currency "hello"}))))))
 
 (deftest presence-of-if-test

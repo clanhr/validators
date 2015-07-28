@@ -41,7 +41,7 @@
 (defn valid-currency?
   "Checks if a currency is valid"
   [raw]
-  (re-find #"\d+(.\d+)?" raw))
+  (re-matches #"\d+(.\d+)?" raw))
 
 (defn currency-validator
   "Validates currency format"
