@@ -1,4 +1,4 @@
-(defproject clanhr/validators "0.5.1"
+(defproject clanhr/validators "0.5.2"
   :description "Utility model validators that integrate with validateur"
   :url "https://github.com/clanhr/validators"
   :license {:name "Eclipse Public License"
