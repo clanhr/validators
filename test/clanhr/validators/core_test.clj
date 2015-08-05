@@ -25,13 +25,22 @@
 (deftest valid-currency-test
   (is (validate/valid-currency? "100"))
   (is (validate/valid-currency? "100.2"))
+  (is (validate/valid-currency? "100,2"))
+  (is (not (validate/valid-currency? "100o2")))
   (is (not (validate/valid-date? "")))
   (is (not (validate/valid-date? nil)))
   (is (not (validate/valid-date? "hello"))))
 
+(deftest convert-currency-test
+  (is (= 100.2 (validate/convert-currency "100.2")))
+  (is (= 100.2 (validate/convert-currency "100,2")))
+  (is (= 100.0 (validate/convert-currency "100")))
+  (is (nil? (validate/convert-currency "waza"))))
+
 (deftest currency-validator-test
   (let [validator (validate/currency-validator :currency)]
     (is (first (validator {:currency "100.1"})))
+    (is (first (validator {:currency "100,1"})))
     (is (not (first (validator {:currency "100.1/mês"}))))
     (is (not (first (validator {:currency "hello"}))))))
 

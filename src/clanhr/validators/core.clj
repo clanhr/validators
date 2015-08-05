@@ -41,7 +41,14 @@
 (defn valid-currency?
   "Checks if a currency is valid"
   [raw]
-  (re-matches #"\d+(.\d+)?" raw))
+  (re-matches #"\d+([.,]\d+)?" raw))
+
+(defn convert-currency
+  "Converts a string to currency"
+  [raw]
+  (when (valid-currency? raw)
+    (let [raw (clojure.string/replace raw #"," ".")]
+      (Double. raw))))
 
 (defn currency-validator
   "Validates currency format"
