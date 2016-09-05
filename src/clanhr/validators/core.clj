@@ -1,10 +1,10 @@
 (ns clanhr.validators.core
   "Utility validators that are compatible with validateur"
-  (import org.joda.time.DateTime)
-  (require [clj-time.coerce :as c]
-           [clj-time.core :as t]
-           [validateur.validation :refer :all]
-           [email-validator.core :as email-validator]))
+  (:import org.joda.time.DateTime)
+  (:require [clj-time.coerce :as c]
+            [clj-time.core :as t]
+            [validateur.validation :refer :all]
+            [email-validator.core :as email-validator]))
 
 (defn valid-date?
   "Verifies if a date is valid"
@@ -13,13 +13,31 @@
       (instance? java.util.Date date)
       (and (string? date) (c/to-date date))))
 
+(defn cljtime
+  "Gets someting and returns a clj time protocol imp"
+  [obj]
+  (cond
+    (instance? org.joda.time.DateTime obj) obj
+    (instance? java.util.Date obj) (c/from-date obj)
+    (string? obj) (c/from-date (c/to-date obj))))
+
+
+(defn valid-date-options?
+  "Checks for specific date options and tests them"
+  [value options]
+  (cond
+    (:lte options) (boolean (or (t/before? (cljtime value) (cljtime (:lte options)))
+                                (t/equal? (cljtime value) (cljtime (:lte options)))))
+    :else true))
+
 (defn date-validator
   "Validates dates"
-  [field]
+  [field & options]
   (fn [data]
     (let [value (field data)
           empty-value? (nil? value)]
-      (if (or empty-value? (valid-date? value))
+      (if (or empty-value? (and (valid-date? value)
+                                (valid-date-options? value (first options))))
         [true {}]
         [false {field #{"invalid date"}}]))))
 
