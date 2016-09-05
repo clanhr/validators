@@ -1,6 +1,7 @@
 (ns clanhr.validators.core-test
-  (use clojure.test)
-  (require [clanhr.validators.core :as validate]
+  (:use clojure.test)
+  (:require [clanhr.validators.core :as validate]
+            [clj-time.core :as t]
            [clj-time.coerce :as c]))
 
 (deftest valid-date-test
@@ -15,7 +16,14 @@
     (is (first (validator {:date (c/from-string "2015-03-03T00:00:00.000Z")})))
     (is (first (validator {:date (c/to-sql-date "2015-03-03T00:00:00.000Z")})))
     (is (first (validator {:date (c/to-date "2015-03-03T00:00:00.000Z")})))
-    (is (not (first (validator {:date ""}))))))
+    (is (not (first (validator {:date ""}))))
+
+    (testing "only dates less than some date"
+      (let [validator (validate/date-validator :date {:lte (t/now)})]
+        (is (true? (first (validator {:date "2015-03-03T00:00:00.000Z"}))))
+        (is (true? (first (validator {:date (c/to-sql-date "2015-03-03T00:00:00.000Z")}))))
+        (is (true? (first (validator {:date (c/to-date "2015-03-03T00:00:00.000Z")}))))
+        (is (false? (first (validator {:date (c/to-date "2025-03-03T00:00:00.000Z")}))))))))
 
 (deftest email-validator-test
   (let [validator (validate/email-validator :email)]
