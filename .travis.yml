@@ -1,7 +1,3 @@
+jdk: openjdk8
 language: clojure
-lein: lein2
-jdk:
-  - openjdk6
-  - openjdk7
-  - oraclejdk7
-  - oraclejdk8
+lein: 2.6.1
